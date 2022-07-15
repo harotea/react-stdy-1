@@ -1,17 +1,16 @@
 const express = require('express')
 const app = express()
 const port = 5005
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const config = require('./server/config/key');
-const { auth } = require('./server/middleware/auth');
-const { User } = require("./server/models/User");
+const config = require('./config/key');
+const { auth } = require('./middleware/auth');
+const { User } = require("./models/User");
 
 //application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: true}));
 
 //application/json 분석해서 가져올 수 있게
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cookieParser());
 
 const mongoose = require('mongoose')
@@ -20,6 +19,10 @@ mongoose.connect(config.mongoURI, {
 }).then(() => console.log('MongoDB Connected...')).catch(err => console.log(err))
 
 app.get('/', (req, res) => res.send('token password compare test'))
+
+app.get('/api/hello', (req, res) => {
+    res.send('안녕하세요~~')
+})
 
 app.post('/register', (req, res) => {
     //회원 가입 할떄 필요한 정보들을 client에서 가져오면
